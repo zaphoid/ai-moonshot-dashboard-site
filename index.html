@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Moonshot Accumulation Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <div class="scanline" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">5-Year Accumulation Monitor</p>
+        <h1>AI Moonshot Dashboard</h1>
+      </div>
+      <div class="top-actions">
+        <button id="notifyButton" class="ghost-button" type="button">Enable Popups</button>
+        <button id="refreshButton" class="primary-button" type="button">Run Scan</button>
+      </div>
+    </header>
+
+    <main class="shell">
+      <section class="hero-panel">
+        <div class="hero-copy">
+          <p class="status-pill" id="marketStatus">Waiting for scan</p>
+          <h2 id="heroTitle">Decision support, not autopilot.</h2>
+          <p id="heroText">
+            The dashboard checks daily and weekly accumulation states after candle close, suppresses watch-only noise,
+            and surfaces only signals that may warrant a manual chart review.
+          </p>
+        </div>
+        <div class="metric-grid" id="metricGrid"></div>
+      </section>
+
+      <section class="layout">
+        <div class="left-stack">
+          <section class="panel alert-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Action Queue</p>
+                <h2>Fresh Alerts</h2>
+              </div>
+              <span id="lastUpdated" class="small-muted">Not scanned yet</span>
+            </div>
+            <div id="alerts" class="alert-list"></div>
+          </section>
+
+          <section class="panel map-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Risk Field</p>
+                <h2>Daily Pullback vs Extension</h2>
+              </div>
+              <span class="small-muted">Lower-left is calmer, upper-right is hotter.</span>
+            </div>
+            <svg id="riskMap" viewBox="0 0 720 320" role="img" aria-label="Risk field map"></svg>
+          </section>
+        </div>
+
+        <aside class="right-stack">
+          <section class="panel">
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">Sector Gate</p>
+                <h2 id="sectorTitle">--</h2>
+              </div>
+            </div>
+            <p id="sectorText" class="explain-text">SMH and QQQM context appears here after the scan.</p>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">Personal Priority</p>
+                <h2>Sector Map</h2>
+              </div>
+            </div>
+            <div id="sectorSummary" class="sector-grid"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">Signal Decoder</p>
+                <h2>What It Means</h2>
+              </div>
+            </div>
+            <div id="signalLegend" class="legend-grid"></div>
+          </section>
+        </aside>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Watchlist</p>
+            <h2>Daily States</h2>
+          </div>
+          <div class="filter-stack">
+            <div class="filters" id="filters"></div>
+            <div class="filters sector-filters" id="sectorFilters"></div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Priority Sector</th>
+                <th>Type</th>
+                <th>State</th>
+                <th>Close</th>
+                <th>RSI</th>
+                <th>Pullback</th>
+                <th>Ext 50</th>
+                <th>Market Context</th>
+              </tr>
+            </thead>
+            <tbody id="dailyTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Friday Lens</p>
+            <h2>Weekly States</h2>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ticker</th>
+                <th>Priority Sector</th>
+                <th>Type</th>
+                <th>State</th>
+                <th>Close</th>
+                <th>RSI</th>
+                <th>Pullback</th>
+                <th>Ext 50</th>
+                <th>Market Context</th>
+              </tr>
+            </thead>
+            <tbody id="weeklyTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div id="toastStack" class="toast-stack" aria-live="polite"></div>
+
+    <dialog id="alertDialog" class="alert-dialog">
+      <div class="dialog-inner">
+        <button id="closeDialog" class="icon-button" type="button" aria-label="Close alert details">x</button>
+        <p class="eyebrow">Action-Worthy Signal</p>
+        <h2 id="dialogTitle">Alert</h2>
+        <div id="dialogBody" class="dialog-body"></div>
+        <div class="dialog-actions">
+          <button id="reviewedButton" class="primary-button" type="button">Mark Reviewed</button>
+          <button id="nextAlertButton" class="ghost-button" type="button">Next Alert</button>
+        </div>
+      </div>
+    </dialog>
+
+    <script src="report-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
